@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Administração de utilizadores</h1>
+<p class="note">Esta rota é protegida por função: apenas <strong>admin</strong>.</p>
+<table><thead><tr><th>ID</th><th>Nome</th><th>Username</th><th>Email</th><th>Função</th><th>Criado</th></tr></thead><tbody>
+{% for u in users %}<tr><td>{{ u['id'] }}</td><td>{{ u['full_name'] }}</td><td>{{ u['username'] }}</td><td>{{ u['email'] }}</td><td>{{ u['role'] }}</td><td>{{ u['created_at'] }}</td></tr>{% endfor %}
+</tbody></table>
+{% endblock %}

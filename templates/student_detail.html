@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Perfil escolar de {{ student['full_name'] }}</h1>
+<table class="detail-table">
+<tr><th>ID</th><td>{{ student['id'] }}</td></tr>
+<tr><th>Utilizador</th><td>{{ student['username'] }}</td></tr>
+<tr><th>Email</th><td>{{ student['email'] }}</td></tr>
+<tr><th>Turma</th><td>{{ student['class_name'] }}</td></tr>
+<tr><th>Morada</th><td>{{ student['address'] }}</td></tr>
+<tr><th>Telefone</th><td>{{ student['phone'] }}</td></tr>
+</table>
+<p class="note">Controlo ativo: um aluno só pode consultar o próprio ID; professor/admin podem consultar alunos.</p>
+{% endblock %}

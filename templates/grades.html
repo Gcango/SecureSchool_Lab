@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ title }}</h1>
+<table>
+<thead><tr>{% if role != 'student' %}<th>Aluno</th>{% endif %}<th>Disciplina</th><th>Nota</th><th>Atualização</th></tr></thead>
+<tbody>
+{% for g in grades %}<tr>{% if role != 'student' %}<td>{{ g['full_name'] }}</td>{% endif %}<td>{{ g['subject'] }}</td><td>{{ '%.1f'|format(g['grade']) }}</td><td>{{ g['updated_at'] }}</td></tr>{% else %}<tr><td colspan="4">Sem avaliações.</td></tr>{% endfor %}
+</tbody></table>
+{% endblock %}

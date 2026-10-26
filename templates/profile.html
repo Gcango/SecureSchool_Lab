@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Perfil</h1>
+<table class="detail-table">
+<tr><th>Nome</th><td>{{ user['full_name'] }}</td></tr>
+<tr><th>Utilizador</th><td>{{ user['username'] }}</td></tr>
+<tr><th>Email</th><td>{{ user['email'] }}</td></tr>
+<tr><th>Função</th><td>{{ user['role'] }}</td></tr>
+{% if profile %}
+<tr><th>Turma</th><td>{{ profile['class_name'] }}</td></tr>
+<tr><th>Morada</th><td>{{ profile['address'] }}</td></tr>
+<tr><th>Telefone</th><td>{{ profile['phone'] }}</td></tr>
+{% endif %}
+</table>
+{% if user['role'] == 'student' %}<p><a class="button" href="{{ url_for('student_detail', user_id=user['id']) }}">Ver perfil escolar detalhado</a></p>{% endif %}
+{% endblock %}

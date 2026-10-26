@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Olá, {{ user['full_name'] }}</h1>
+<p>Perfil de acesso: <span class="badge">{{ user['role'] }}</span></p>
+<div class="cards">
+  <a class="card" href="{{ url_for('profile') }}"><h2>👤 Perfil</h2><p>Dados da conta e, para alunos, perfil escolar.</p></a>
+  <a class="card" href="{{ url_for('grades') }}"><h2>📊 Avaliações</h2><p>Consulta de notas com controlo por função.</p></a>
+  <a class="card" href="{{ url_for('comments') }}"><h2>💬 Comentários</h2><p>Conteúdo introduzido por utilizadores e apresentado com escaping.</p></a>
+  <a class="card" href="{{ url_for('uploads') }}"><h2>📁 Trabalhos</h2><p>Upload controlado de PDF, DOCX e TXT.</p></a>
+  {% if user['role'] in ['teacher','admin'] %}<a class="card" href="{{ url_for('teacher_students') }}"><h2>🎓 Alunos</h2><p>Área restrita a professores e administradores.</p></a>{% endif %}
+  {% if user['role'] == 'admin' %}<a class="card" href="{{ url_for('admin_users') }}"><h2>⚙️ Administração</h2><p>Lista de utilizadores — apenas administrador.</p></a>{% endif %}
+</div>
+<div class="note"><strong>Base segura:</strong> este projeto começa com controlos ativos. O professor pode introduzir falhas, uma de cada vez, apenas em ambiente local e controlado.</div>
+{% endblock %}

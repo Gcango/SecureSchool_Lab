@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}SecureSchool Lab{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><a href="{{ url_for('dashboard') if current_user else url_for('login') }}">🛡️ SecureSchool Lab</a></div>
+  {% if current_user %}
+  <nav>
+    <a href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a href="{{ url_for('profile') }}">Perfil</a>
+    <a href="{{ url_for('grades') }}">Avaliações</a>
+    <a href="{{ url_for('comments') }}">Comentários</a>
+    <a href="{{ url_for('uploads') }}">Trabalhos</a>
+    {% if current_user['role'] in ['teacher','admin'] %}<a href="{{ url_for('teacher_students') }}">Alunos</a>{% endif %}
+    {% if current_user['role'] == 'admin' %}<a href="{{ url_for('admin_users') }}">Admin</a>{% endif %}
+  </nav>
+  <form class="logout" method="post" action="{{ url_for('logout') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button class="link-button" type="submit">Sair</button>
+  </form>
+  {% endif %}
+</header>
+<main class="container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}
+    {% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</main>
+<footer>Laboratório educativo local • dados totalmente fictícios • não publicar na Internet</footer>
+</body>
+</html>

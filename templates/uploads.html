@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Entrega de trabalhos</h1>
+<form method="post" enctype="multipart/form-data" class="panel form-grid">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label>Ficheiro (PDF, DOCX ou TXT; máx. 2 MB)<input type="file" name="file" required accept=".pdf,.docx,.txt"></label>
+  <button class="primary" type="submit">Enviar trabalho</button>
+</form>
+<div class="note"><strong>Controlos ativos:</strong> allowlist de extensões, nome aleatório no servidor, limite de tamanho e armazenamento fora de <code>static/</code>.</div>
+<table><thead><tr>{% if role != 'student' %}<th>Aluno</th>{% endif %}<th>Ficheiro</th><th>Data</th><th></th></tr></thead><tbody>
+{% for u in uploads %}<tr>{% if role != 'student' %}<td>{{ u['full_name'] }}</td>{% endif %}<td>{{ u['original_name'] }}</td><td>{{ u['created_at'] }}</td><td><a href="{{ url_for('download_upload', upload_id=u['id']) }}">Download</a></td></tr>{% else %}<tr><td colspan="4">Sem ficheiros.</td></tr>{% endfor %}
+</tbody></table>
+{% endblock %}

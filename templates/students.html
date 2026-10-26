@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Alunos</h1>
+<table><thead><tr><th>Nome</th><th>Utilizador</th><th>Email</th><th>Turma</th><th>Ações</th></tr></thead><tbody>
+{% for s in students %}<tr><td>{{ s['full_name'] }}</td><td>{{ s['username'] }}</td><td>{{ s['email'] }}</td><td>{{ s['class_name'] }}</td><td><a href="{{ url_for('student_detail', user_id=s['id']) }}">Perfil</a> · <a href="{{ url_for('teacher_grade_student', student_id=s['id']) }}">Avaliações</a></td></tr>{% endfor %}
+</tbody></table>
+{% endblock %}

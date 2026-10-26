@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Comentários</h1>
+<form method="post" class="panel form-grid">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label>Novo comentário<textarea name="body" maxlength="500" required rows="4" placeholder="Escreva até 500 caracteres..."></textarea></label>
+  <button class="primary" type="submit">Publicar</button>
+</form>
+<div class="note"><strong>Controlo ativo:</strong> Jinja faz escaping automático do conteúdo apresentado. Este ponto é útil para o laboratório de XSS.</div>
+{% for c in comments %}
+<article class="comment"><strong>{{ c['full_name'] }}</strong><small>{{ c['created_at'] }}</small><p>{{ c['body'] }}</p></article>
+{% else %}<p>Sem comentários.</p>{% endfor %}
+{% endblock %}

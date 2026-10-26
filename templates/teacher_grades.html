@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Avaliações — {{ student['full_name'] }}</h1>
+<form method="post" class="panel form-inline">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label>Disciplina<input name="subject" maxlength="80" required></label>
+  <label>Nota (0–20)<input name="grade" type="number" min="0" max="20" step="0.1" required></label>
+  <button class="primary" type="submit">Registar</button>
+</form>
+<table><thead><tr><th>Disciplina</th><th>Nota</th><th>Data</th></tr></thead><tbody>{% for g in grades %}<tr><td>{{ g['subject'] }}</td><td>{{ g['grade'] }}</td><td>{{ g['updated_at'] }}</td></tr>{% endfor %}</tbody></table>
+{% endblock %}
