@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block title %}Injeção SQL • SecureSchool Lab{% endblock %}
+
+{% macro method_panel(title, kind, r) %}
+<div class="sql-panel {{ kind }}">
+  <h3>{{ title }}</h3>
+  {% if r['params'] is none %}
+  <p class="label">Query gerada (input colado na string):</p>
+  <pre>{{ r['query'] }}</pre>
+  {% else %}
+  <p class="label">Query preparada:</p>
+  <pre>{{ r['query'] }}</pre>
+  <p class="label">Parâmetro enviado separadamente:</p>
+  <pre>('{{ r['params'][0] }}',)</pre>
+  {% endif %}
+  {% if r['error'] %}
+  <div class="alert warning">⚠️ Erro na execução: {{ r['error'] }}</div>
+  {% elif r['rows'] %}
+  <div class="alert {{ 'danger' if kind == 'vuln' and r['rows']|length > 1 else 'success' }}">✓ Encontrados {{ r['rows']|length }} registo(s)</div>
+  <table class="compact">
+    <tr>{% for c in columns %}<th>{{ c }}</th>{% endfor %}</tr>
+    {% for row in r['rows'] %}<tr>{% for v in row %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}
+  </table>
+  {% else %}
+  <div class="alert info">✗ Nenhum registo encontrado.</div>
+  {% endif %}
+</div>
+{% endmacro %}
+
+{% macro comparison(r) %}
+<div class="sql-compare">
+  {{ method_panel('Método A — Concatenação direta (VULNERÁVEL)', 'vuln', r['vulneravel']) }}
+  {{ method_panel('Método B — Prepared Statement (SEGURO)', 'safe', r['seguro']) }}
+</div>
+{% endmacro %}
+
+{% block content %}
+<h1>Injeção SQL vs. Prepared Statements</h1>
+<p class="muted">Demonstração educativa. Cada teste corre numa base SQLite em memória com dados fictícios, isolada da base real da aplicação.</p>
+
+<form method="get" class="panel form-inline">
+  <label class="grow">Username a pesquisar
+    <input name="q" maxlength="200" value="{{ result['input'] if result else '' }}" placeholder="ex.: maria  ou  ' OR '1'='1" autocomplete="off" spellcheck="false">
+  </label>
+  <button class="primary" type="submit">Testar nos dois métodos</button>
+  <a class="button secondary" href="{{ url_for('sql_injection_lab', demo=1) }}">Demonstração completa</a>
+</form>
+
+<div class="suggestions">
+  <strong>Sugestões de inputs:</strong>
+  {% for value, label in suggestions %}
+  <a class="chip" href="{{ url_for('sql_injection_lab', q=value) }}" title="{{ label }}"><code>{{ value }}</code> <span>{{ label }}</span></a>
+  {% endfor %}
+</div>
+
+{% if result %}
+<h2>Resultado para <code>{{ result['input'] }}</code></h2>
+{{ comparison(result) }}
+{% endif %}
+
+{% if demo %}
+<h2>Demonstração completa de ataque</h2>
+{% for title, r in demo %}
+<h3 class="step">{{ loop.index }}. {{ title }} — input <code>{{ r['input'] }}</code></h3>
+{{ comparison(r) }}
+{% endfor %}
+{% endif %}
+
+<details class="panel">
+  <summary><strong>Todos os utilizadores na base de demonstração</strong></summary>
+  <table class="compact">
+    <tr>{% for c in columns %}<th>{{ c }}</th>{% endfor %}</tr>
+    {% for row in all_users %}<tr>{% for v in row %}<td>{{ v }}</td>{% endfor %}</tr>{% endfor %}
+  </table>
+</details>
+
+<div class="note">
+  <strong>Porque é que o Método B é seguro?</strong> No prepared statement a estrutura da query é enviada primeiro
+  e o input segue <em>separadamente</em> como dado. O motor da base de dados nunca o interpreta como SQL,
+  por isso <code>' OR '1'='1</code> é apenas um username estranho que não existe.
+  Lembre-se: <strong>use sempre prepared statements</strong> (o login desta aplicação já o faz).
+</div>
+{% endblock %}

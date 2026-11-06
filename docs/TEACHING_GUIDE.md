@@ -8,7 +8,7 @@ A aplicação fornecida está **segura por omissão**. Antes de cada experiênci
 
 | Tópico | Zona do projeto | Controlo presente na base | Questão para os alunos |
 |---|---|---|---|
-| SQL Injection | `login()` em `app.py` | query parametrizada | O que mudaria se o input fosse concatenado na string SQL? |
+| SQL Injection | `login()` em `app.py` + página **Lab SQL** (`/lab/sql-injection`, `sqli_lab.py`) | query parametrizada | O que mudaria se o input fosse concatenado na string SQL? |
 | Passwords | `db.py` + `login()` | hash e verificação segura | O que aconteceria se a password estivesse em texto simples? |
 | XSS | `/comments` + `comments.html` | autoescaping Jinja | O browser apresenta o comentário como texto ou código? |
 | Broken Access Control / IDOR | `/students/<id>` | verificação do proprietário/role | Um aluno consegue alterar o ID e ver outro perfil? |
