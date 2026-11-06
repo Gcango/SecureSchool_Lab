@@ -7,6 +7,7 @@
   <a class="card" href="{{ url_for('grades') }}"><h2>📊 Avaliações</h2><p>Consulta de notas com controlo por função.</p></a>
   <a class="card" href="{{ url_for('comments') }}"><h2>💬 Comentários</h2><p>Conteúdo introduzido por utilizadores e apresentado com escaping.</p></a>
   <a class="card" href="{{ url_for('uploads') }}"><h2>📁 Trabalhos</h2><p>Upload controlado de PDF, DOCX e TXT.</p></a>
+  <a class="card" href="{{ url_for('sql_injection_lab') }}"><h2>🧪 Lab Injeção SQL</h2><p>Concatenação vulnerável vs. prepared statement, lado a lado.</p></a>
   {% if user['role'] in ['teacher','admin'] %}<a class="card" href="{{ url_for('teacher_students') }}"><h2>🎓 Alunos</h2><p>Área restrita a professores e administradores.</p></a>{% endif %}
   {% if user['role'] == 'admin' %}<a class="card" href="{{ url_for('admin_users') }}"><h2>⚙️ Administração</h2><p>Lista de utilizadores — apenas administrador.</p></a>{% endif %}
 </div>

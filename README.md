@@ -13,6 +13,7 @@ O projeto é uma pequena plataforma escolar, deliberadamente simples, criada par
 - perfil de aluno e controlo de acesso por ID;
 - consulta e registo de avaliações;
 - comentários (úteis para o laboratório de XSS);
+- laboratório de Injeção SQL (`/lab/sql-injection`): compara concatenação vulnerável e prepared statement numa base em memória isolada;
 - upload/download de trabalhos;
 - área de professor;
 - área administrativa;
@@ -55,6 +56,8 @@ python app.py
 Na primeira execução, a base de dados de demonstração é criada automaticamente.
 
 Abra: `http://127.0.0.1:5000`
+
+> Use um browser normal (Chrome, Safari, Firefox). O browser embutido do VS Code pode não enviar o cookie de sessão no envio do formulário, o que dá **Erro 400 — token CSRF em falta ou incorreto** no login.
 
 ## Contas de demonstração
 

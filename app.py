@@ -13,6 +13,7 @@ from werkzeug.utils import secure_filename
 
 from config import Config
 from db import close_db, get_db, initialise_database, log_action
+import sqli_lab
 
 ALLOWED_EXTENSIONS = {"pdf", "docx", "txt"}
 
@@ -317,6 +318,31 @@ def create_app():
             (student_id,),
         ).fetchall()
         return render_template("teacher_grades.html", student=student, grades=rows)
+
+    @app.route("/lab/sql-injection")
+    @login_required
+    def sql_injection_lab():
+        # Pedido GET de leitura sobre uma base em memória: não altera estado, por isso não precisa de CSRF.
+        user = current_user()
+        username_input = request.args.get("q")
+        result = None
+        demo = None
+        if username_input is not None:
+            if len(username_input) > 200:
+                flash("O input deve ter no máximo 200 caracteres.", "danger")
+            else:
+                result = sqli_lab.comparar(username_input)
+                log_action(user["id"], "SQLI_LAB_TEST", f"Input testado: {username_input}")
+        if request.args.get("demo") == "1":
+            demo = [(title, sqli_lab.comparar(value)) for title, value in sqli_lab.SCENARIOS]
+        return render_template(
+            "sql_lab.html",
+            result=result,
+            demo=demo,
+            suggestions=sqli_lab.SUGGESTIONS,
+            all_users=sqli_lab.todos_os_utilizadores(),
+            columns=sqli_lab.COLUMNS,
+        )
 
     @app.route("/admin/users")
     @role_required("admin")
